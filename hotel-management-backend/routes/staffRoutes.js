@@ -13,10 +13,11 @@ router.get('/', async (req, res) => {
 // POST add staff
 router.post('/', async (req, res) => {
   try {
-    const { Name, Dept, Age, Contact_Info, Salary } = req.body;
+    const { Name, Dept, Age, Contact_Info, Salary, Join_Date } = req.body;
+    const joinDate = Join_Date || new Date().toISOString().split('T')[0];
     const [result] = await pool.query(
-      'INSERT INTO Staff (Name, Dept, Age, Contact_Info, Salary) VALUES (?, ?, ?, ?, ?)',
-      [Name, Dept, Age, Contact_Info, Salary]
+      'INSERT INTO Staff (Name, Dept, Age, Contact_Info, Salary, Join_Date) VALUES (?, ?, ?, ?, ?, ?)',
+      [Name, Dept, Age, Contact_Info, Salary, joinDate]
     );
     res.json({ insertedId: result.insertId });
   } catch (err) { res.status(500).json({ error: err.message }); }
